@@ -23,5 +23,5 @@ project.lock.json
 .secrets
 appsettings.json
 local.settings.json
-params.json
+params.js
 payload-examples.md
