@@ -1,6 +1,7 @@
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var console
 var params = require('./params.js')
+var demoData = require('./demoData.js')
 
 module.exports = function (context, myTimer) {
     console = context
@@ -17,17 +18,18 @@ function getDevice(){
     return  {
         "oem_name" : "Apple",
         "os_name" : "iOS",
-        "app_version" : "1.0",
+        "app_version" : demoData.getAppVersion(),
         "time_zone_offset" : -420,
         "sdk_version" : "0.13.0",
         "screen_size" : "2208x1242",
-        "locale" : getRandomValue(Countries),
+        "locale" : demoData.getLanguage(),
         "os_build" : "16G29",
-        "app_namespace" : "com.colbylwilliams.MobileAzureDevDays",
-        "os_version" : "11.0.1",
+        "app_namespace" : params.appNamespace,
+        "os_version" : demoData.getOSVersion(),
         "sdk_name" : "mobilecenter.ios",
-        "model" : "specialMac",
-        "app_build" : "1"  
+        "model" : demoData.getDeviceModel(),
+        "app_build" : "1",
+        "carrier_country" : demoData.getCountry()
     }
 }
 function sendStartService(device, context){
@@ -84,7 +86,7 @@ async function send(payloadObject, context){
     //Send the proper header information along with the request
     http.setRequestHeader("Content-type", "application/json");
     http.setRequestHeader("Install-ID", "CA3BA120-0FBA-448F-93EE-82EA02CA49DA");
-    http.setRequestHeader("App-Secret", params.appSecret;
+    http.setRequestHeader("App-Secret", params.appSecret);
     
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
@@ -96,58 +98,3 @@ async function send(payloadObject, context){
     await http.send(payload);
 }
 
-//////////////////
-//
-// Generator Data
-//
-//////////////////
-function getRandomValue(obj){
-    var sum = 0
-    for(i=0; i < Object.values(obj).length; i++){
-        sum += Object.values(obj)[i]
-    }
-
-    console.log('Size: '+sum)
-    var pos = Math.random()*sum
-    console.log('Pos: '+pos)
-    var tmp = 0
-    for(i=0; i < Object.values(obj).length; i++){
-        tmp += Object.values(obj)[i]
-        console.log(tmp)
-        if(pos < tmp){
-            console.log('yeah: '+Object.keys(obj)[i])
-            return Object.keys(obj)[i]
-        }
-    }
-    console.log('oOHOH')
-}
-
-function getCountry(){
-    var sum = 0
-    for(i=0; i < Object.values(Countries).length; i++){
-        sum += Object.values(Countries)[i]
-    }
-
-    console.log('Size: '+sum)
-    var pos = Math.random()*sum
-    console.log('Pos: '+pos)
-    var tmp = 0
-    for(i=0; i < Object.values(Countries).length; i++){
-        tmp += Object.values(Countries)[i]
-        console.log(tmp)
-        if(pos < tmp){
-            console.log('yeah: '+Object.keys(Countries)[i])
-            return Object.keys(Countries)[i]
-        }
-    }
-    console.log('oOHOH')
-}
-Countries = {
-    "en_US": 5300,
-    "de_DE":1035,  
-    "fr_FR":902,  
-    "br_PT":891,  
-    "jp_JP":836,  
-    "cn_CN":638,  
-    "sp_MX":400
-}
